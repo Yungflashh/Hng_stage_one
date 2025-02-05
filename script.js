@@ -73,5 +73,5 @@ newGameButton.addEventListener('click', () => {
     scoreElement.textContent = score;
     setUpGame();
 });
-
-setUpGame();
+}
+setUpGame()
