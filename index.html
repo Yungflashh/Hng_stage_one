@@ -8,27 +8,18 @@
 </head>
 <body>
     <div class="game-container">
-        <h1>Color Guessing Game</h1>
-        
-        <div class="color-display">
-            <div id="colorBox" data-testid="colorBox"></div>
+        <h1 class="game-title">Color Guessing Game</h1>
+        <div class="game-instructions" data-testid="gameInstructions">
+            <p>Guess the color that matches the color box!</p>
         </div>
-        
-        <p id="gameInstructions" data-testid="gameInstructions">Guess the correct color!</p>
-        
-        <div class="color-options">
-            
-        </div>
-        
-        <p id="gameStatus" data-testid="gameStatus"></p>
-        
+        <div id="colorBox" data-testid="colorBox"></div>
+        <div id="colorOptions" class="color-options"></div>
+        <p id="gameStatus" class="game-status" data-testid="gameStatus"></p>
         <div class="score-container">
-            <span>Score: </span><span id="score" data-testid="score">0</span>
+            <p>Score: <span id="score" data-testid="score">0</span></p>
         </div>
-        
-        <button id="newGameButton" data-testid="newGameButton">New Game</button>
+        <button id="newGameButton" class="new-game-button" data-testid="newGameButton">New Game</button>
     </div>
-    
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,66 +1,77 @@
-
-
 const colorBox = document.getElementById('colorBox');
-const colorOptionsContainer = document.querySelector('.color-options');
+const colorOptionsContainer = document.getElementById('colorOptions');
 const gameStatus = document.getElementById('gameStatus');
 const scoreElement = document.getElementById('score');
 const newGameButton = document.getElementById('newGameButton');
 
-let colors = ["#FF5733", "#33FF57", "#3357FF", "#F333FF", "#FFB533", "#33FFF5"];
-let targetColor;
 let score = 0;
+let correctColor;
+
+const colors = [
+    'red', 'green', 'blue', 'yellow', 'purple', 'orange',
+    'pink', 'cyan', 'magenta', 'lime', 'indigo', 'violet'
+];
 
 function getRandomColor() {
-    return colors[Math.floor(Math.random() * colors.length)];
+    const randomIndex = Math.floor(Math.random() * colors.length);
+    return colors[randomIndex];
 }
 
-function setupGame() {
-  
-    targetColor = getRandomColor();
-    colorBox.style.backgroundColor = targetColor;
+function setUpGame() {
+    correctColor = getRandomColor();
+    colorBox.style.backgroundColor = correctColor;
+    gameStatus.textContent = 'Guess the correct color!';
+    gameStatus.classList.remove('correct', 'wrong');
+    gameStatus.style.opacity = 1; 
+    colorOptionsContainer.innerHTML = '';
 
-    colorOptionsContainer.innerHTML = "";
-
-
-    colors.forEach(color => {
-        const colorOption = document.createElement("button");
-        colorOption.style.backgroundColor = color;
-        colorOption.classList.add('color-option');
-        colorOption.setAttribute('data-testid', 'colorOption');
-        colorOption.addEventListener("click", checkGuess);
-        colorOptionsContainer.appendChild(colorOption);
-    });
-
-    gameStatus.textContent = "Guess the correct color!";
-    gameStatus.className = '';
-    scoreElement.textContent = score;
-}
-
-
-function checkGuess(event) {
-    const clickedColor = event.target.style.backgroundColor;
-    if (clickedColor === targetColor) {
-        score++;
-        gameStatus.textContent = "Correct! 🎉";
-        gameStatus.classList.add('correct');
-    } else {
-        score = Math.max(0, score - 1);
-        gameStatus.textContent = "Wrong! Try again. 😢";
-        gameStatus.classList.add('wrong');
+    let colorOptions = [];
+    while (colorOptions.length < 6) {
+        const color = getRandomColor();
+        if (!colorOptions.includes(color)) {
+            colorOptions.push(color);
+        }
     }
 
-    scoreElement.textContent = score;
+    const randomIndex = Math.floor(Math.random() * 6);
+    colorOptions[randomIndex] = correctColor; 
+    colorOptions.forEach(color => {
+        const button = document.createElement('button');
+        button.classList.add('color-option');
+        button.style.backgroundColor = color;
+        button.setAttribute('data-testid', 'colorOption');
+        button.addEventListener('click', () => checkGuess(color));
+        colorOptionsContainer.appendChild(button);
+    });
+}
 
-    gameStatus.classList.add('fade-out');
+function checkGuess(selectedColor) {
+    if (selectedColor === correctColor) {
+        score++;
+        gameStatus.textContent = 'Correct! 🎉';
+        gameStatus.classList.add('correct');
+        scoreElement.textContent = score;
+        setTimeout(() => {
+            colorBox.style.backgroundColor = getRandomColor();
+            setUpGame();
+        }, 1000); 
+    } else {
+        gameStatus.textContent = 'Wrong, try again! ❌';
+        gameStatus.classList.add('wrong');
+        setTimeout(() => {
+            colorBox.style.backgroundColor = getRandomColor();
+            setUpGame();
+        }, 1000); 
 
- 
     setTimeout(() => {
-        gameStatus.classList.remove('fade-out');
-        setupGame();
+        gameStatus.style.opacity = 1; 
     }, 1500);
 }
 
-newGameButton.addEventListener('click', setupGame);
+newGameButton.addEventListener('click', () => {
+    score = 0;
+    scoreElement.textContent = score;
+    setUpGame();
+});
 
-
-setupGame();
+setUpGame();
